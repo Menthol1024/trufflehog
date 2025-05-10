@@ -35,13 +35,18 @@ jobs:
           GOARCH=${{ matrix.goarch }}
           output_name="trufflehog-${{ matrix.goos }}-${{ matrix.goarch }}-${{ steps.timestamp.outputs.TIMESTAMP }}" # 替换为你的项目名称
           go build -ldflags "-w -s" -o "${output_name}" .
-          echo "OUTPUT_FILE=${output_name}" >> "$GITHUB_ENV" 
+          echo "OUTPUT_FILE=${output_name}" >> "$GITHUB_ENV"
+          echo "BUILD_TIMESTAMP=${{ steps.timestamp.outputs.TIMESTAMP }}" >> "$GITHUB_ENV" # 将每个构建的时间戳也设置为环境变量
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-output-${{ steps.timestamp.outputs.TIMESTAMP }}
+          name: build-output-${{ env.BUILD_TIMESTAMP }}-${{ matrix.goos }}-${{ matrix.goarch }} # 修改 Artifact 名称，包含更多信息
           path: ${{ env.OUTPUT_FILE }}
+          if-no-files-found: error
+
+    outputs:
+      timestamp: ${{ steps.timestamp.outputs.TIMESTAMP }} # 保留一个全局的时间戳，用于 Release 标签
 
   create-release:
     needs: build-and-release # Depends on the build job
@@ -52,17 +57,17 @@ jobs:
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: build-output-${{ needs.build.outputs.timestamp }}
+          pattern: build-output-* # 下载所有以 build-output- 开头的 Artifacts
           path: release-assets
 
       - name: Set Release Tag
-        run: echo "RELEASE_TAG=${{ needs.build.outputs.timestamp }}" >> "$GITHUB_ENV"
+        run: echo "RELEASE_TAG=v-${{ needs.build-and-release.outputs.timestamp }}" >> "$GITHUB_ENV" # 使用 build 任务的全局时间戳
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: v-${{ needs.build.outputs.timestamp }}
-          RELEASE_NAME: Release ${{ needs.build.outputs.timestamp }}
+          TAG_NAME: ${{ env.RELEASE_TAG }}
+          RELEASE_NAME: Release ${{ needs.build-and-release.outputs.timestamp }}
         with:
           files: release-assets/* # Upload all files in the release-assets directory
