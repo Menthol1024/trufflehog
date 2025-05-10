@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main # 或者你主要开发的分支名称
-    commits:
-      - 'build*' # 匹配包含 "build" 开头的 commit 信息
 
 jobs:
   build-and-release:
@@ -15,6 +13,8 @@ jobs:
         goos: [linux, windows, darwin]
         goarch: [amd64, arm64]
       fail-fast: false # 如果某个构建失败，不阻止其他构建继续
+
+    if: contains(github.event.head_commit.message, 'build')
 
     steps:
       - name: Checkout code
@@ -34,19 +34,31 @@ jobs:
           GOOS=${{ matrix.goos }}
           GOARCH=${{ matrix.goarch }}
           output_name="trufflehog-${{ matrix.goos }}-${{ matrix.goarch }}-${{ steps.timestamp.outputs.TIMESTAMP }}" # 替换为你的项目名称
-          go build -ldflags "-w -s" -o "${output_name}" .
+          go build -o "${output_name}" .
+          echo "OUTPUT_FILE=${output_name}" >> "$GITHUB_ENV" # 将输出文件名设置为环境变量
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output-${{ steps.timestamp.outputs.TIMESTAMP }}
+          path: ${{ env.OUTPUT_FILE }}
+
+  create-release:
+    needs: build # 依赖于 build job 完成
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'build')
+
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-output-${{ needs.build.outputs.timestamp }}
+          path: release-assets
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
-        if: github.event_name == 'push' && contains(github.event.head_commit.message, 'build')
         with:
-          tag_name: ${{ steps.timestamp.outputs.TIMESTAMP }}
-          name: Release ${{ steps.timestamp.outputs.TIMESTAMP }}
-          files: |
-            trufflehog-linux-amd64-${{ steps.timestamp.outputs.TIMESTAMP }}
-            trufflehog-linux-arm64-${{ steps.timestamp.outputs.TIMESTAMP }}
-            trufflehog-windows-amd64-${{ steps.timestamp.outputs.TIMESTAMP }}.exe
-            trufflehog-windows-arm64-${{ steps.timestamp.outputs.TIMESTAMP }}.exe
-            trufflehog-darwin-amd64-${{ steps.timestamp.outputs.TIMESTAMP }}
-            trufflehog-darwin-arm64-${{ steps.timestamp.outputs.TIMESTAMP }}
+          tag_name: ${{ needs.build.outputs.timestamp }}
+          name: Release ${{ needs.build.outputs.timestamp }}
+          files: release-assets/* # 上传 release-assets 目录下的所有文件
           token: ${{ secrets.GITHUB_TOKEN }}
