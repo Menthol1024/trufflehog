@@ -220,6 +220,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/diggernaut"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/digitaloceantoken"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/digitaloceanv2"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/dingdoc"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/discordbottoken"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/discordwebhook"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/disqus"
@@ -1068,6 +1069,7 @@ func buildDetectorList() []detectors.Detector {
 		&diggernaut.Scanner{},
 		&digitaloceantoken.Scanner{},
 		&digitaloceanv2.Scanner{},
+		&dingdoc.Scanner{},
 		&discordbottoken.Scanner{},
 		&discordwebhook.Scanner{},
 		&disqus.Scanner{},

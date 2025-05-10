@@ -60,6 +60,9 @@ func (p *PlainPrinter) Print(_ context.Context, r *detectors.ResultWithMetadata)
 	if r.VerificationFromCache {
 		cyanPrinter.Print("(Verification info cached)\n")
 	}
+	if out.DetectorType == "1026" {
+		out.DetectorType = "dingdoc"
+	}
 	printer.Printf("Detector Type: %s\n", out.DetectorType)
 	printer.Printf("Decoder Type: %s\n", out.DecoderType)
 	printer.Printf("Raw result: %s\n", whitePrinter.Sprint(out.Raw))

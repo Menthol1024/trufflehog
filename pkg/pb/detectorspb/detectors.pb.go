@@ -1130,6 +1130,7 @@ const (
 	DetectorType_XAI                                     DetectorType = 1023
 	DetectorType_AzureDirectManagementKey                DetectorType = 1024
 	DetectorType_AzureAppConfigConnectionString          DetectorType = 1025
+	DetectorType_DingDoc                                 DetectorType = 1026
 )
 
 // Enum value maps for DetectorType.
@@ -2157,6 +2158,7 @@ var (
 		1023: "XAI",
 		1024: "AzureDirectManagementKey",
 		1025: "AzureAppConfigConnectionString",
+		1026: "DingDoc",
 	}
 	DetectorType_value = map[string]int32{
 		"Alibaba":                               0,
@@ -3181,6 +3183,7 @@ var (
 		"XAI":                               1023,
 		"AzureDirectManagementKey":          1024,
 		"AzureAppConfigConnectionString":    1025,
+		"DingDoc":                           1026,
 	}
 )
 
