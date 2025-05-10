@@ -35,7 +35,7 @@ jobs:
           GOARCH=${{ matrix.goarch }}
           output_name="trufflehog-${{ matrix.goos }}-${{ matrix.goarch }}-${{ steps.timestamp.outputs.TIMESTAMP }}" # 替换为你的项目名称
           go build -ldflags "-w -s" -o "${output_name}" .
-          echo "OUTPUT_FILE=${output_name}" >> "$GITHUB_ENV" # 将输出文件名设置为环境变量
+          echo "OUTPUT_FILE=${output_name}" >> "$GITHUB_ENV" 
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
