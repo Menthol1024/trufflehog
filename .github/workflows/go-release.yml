@@ -42,7 +42,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-output-${{ github.run_id }}-${{ env.GOOS }}-${{ env.GOARCH }}-${{ env.BUILD_TIMESTAMP }}
+          name: "build-output-${{ github.run_id }}-${{ env.GOOS }}-${{ env.GOARCH }}-${{ env.BUILD_TIMESTAMP }}"
           path: ${{ env.OUTPUT_FILE }}
           if-no-files-found: error
 
@@ -60,6 +60,9 @@ jobs:
         with:
           path: release-assets
 
+      - name: Check Artifacts
+        run: ls -l release-assets # 检查是否正确下载了 artifacts
+
       - name: Set Release Tag
         run: echo "RELEASE_TAG=v-${{ needs.build-and-release.outputs.timestamp }}" >> "$GITHUB_ENV"
 
@@ -71,3 +74,4 @@ jobs:
           tag_name: ${{ env.RELEASE_TAG }}
           release_name: Release ${{ needs.build-and-release.outputs.timestamp }}
           files: release-assets/*
+          draft: false # 确保这是一个正式发布
