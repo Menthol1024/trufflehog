@@ -44,7 +44,7 @@ jobs:
           path: ${{ env.OUTPUT_FILE }}
 
   create-release:
-    needs: build-and-release
+    needs: build-and-release # Depends on the build job
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && contains(github.event.head_commit.message, 'build')
 
@@ -55,10 +55,14 @@ jobs:
           pattern: build-output-${{ needs.build.outputs.timestamp }}
           path: release-assets
 
+      - name: Set Release Tag
+        run: echo "RELEASE_TAG=${{ needs.build.outputs.timestamp }}" >> "$GITHUB_ENV"
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ env.RELEASE_TAG }}
+          RELEASE_NAME: Release ${{ env.RELEASE_TAG }}
         with:
-          tag_name: ${{ needs.build.outputs.timestamp }}
-          name: Release ${{ needs.build.outputs.timestamp }}
-          files: release-assets/* # 上传 release-assets 目录下的所有文件
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: release-assets/* # Upload all files in the release-assets directory
