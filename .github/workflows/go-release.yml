@@ -1,6 +1,5 @@
 name: Build and Release
 
-
 on:
   push:
     branches:
@@ -24,7 +23,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '>=1.18' # 根据你的 Go 版本修改
+          go-version: '>=1.23' # 根据你的 Go 版本修改
 
       - name: Get current timestamp
         id: timestamp
@@ -35,7 +34,7 @@ jobs:
           GOOS=${{ matrix.goos }}
           GOARCH=${{ matrix.goarch }}
           output_name="trufflehog-${{ matrix.goos }}-${{ matrix.goarch }}-${{ steps.timestamp.outputs.TIMESTAMP }}" # 替换为你的项目名称
-          go build -o "${output_name}" .
+          go build -ldflags "-w -s" -o "${output_name}" .
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
