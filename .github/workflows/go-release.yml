@@ -1,52 +1,52 @@
-name: Go Build and Release
+name: Build and Release
 
 on:
   push:
     branches:
-      - main
+      - main # 或者你主要开发的分支名称
+    commits:
+      - 'build*' # 匹配包含 "build" 开头的 commit 信息
 
 jobs:
   build-and-release:
-    if: contains(github.event.head_commit.message, 'build')
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64]
+      fail-fast: false # 如果某个构建失败，不阻止其他构建继续
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-          submodules: recursive
+
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.23
+          go-version: '>=1.18' # 根据你的 Go 版本修改
 
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5
+      - name: Get current timestamp
+        id: timestamp
+        run: echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: |
+          GOOS=${{ matrix.goos }}
+          GOARCH=${{ matrix.goarch }}
+          output_name="trufflehog-${{ matrix.goos }}-${{ matrix.goarch }}-${{ steps.timestamp.outputs.TIMESTAMP }}" # 替换为你的项目名称
+          go build -o "${output_name}" .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, 'build')
         with:
-          distribution: goreleaser
-          version: latest
-          args: release --rm-dist --skip-validate
-          workdir: v2/
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOPATH: "/home/runner/go"
-
-      - name: Set up Go 1.23
-        uses: actions/setup-go@v3
-        with:
-          go-version: '1.23'
-
-      - name: Zip files
-        run: zip -r v2/dist/trufflehog_archive.zip v2/dist/trufflehog* tools/* README.md
-
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: v2/dist/trufflehog*
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
-          draft: true
+          tag_name: ${{ steps.timestamp.outputs.TIMESTAMP }}
+          name: Release ${{ steps.timestamp.outputs.TIMESTAMP }}
+          files: |
+            trufflehog-linux-amd64-${{ steps.timestamp.outputs.TIMESTAMP }}
+            trufflehog-linux-arm64-${{ steps.timestamp.outputs.TIMESTAMP }}
+            trufflehog-windows-amd64-${{ steps.timestamp.outputs.TIMESTAMP }}.exe
+            trufflehog-windows-arm64-${{ steps.timestamp.outputs.TIMESTAMP }}.exe
+            trufflehog-darwin-amd64-${{ steps.timestamp.outputs.TIMESTAMP }}
+            trufflehog-darwin-arm64-${{ steps.timestamp.outputs.TIMESTAMP }}
+          token: ${{ secrets.GITHUB_TOKEN }}
