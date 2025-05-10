@@ -67,7 +67,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ env.RELEASE_TAG }}
-          RELEASE_NAME: Release ${{ needs.build-and-release.outputs.timestamp }}
         with:
+          tag_name: v-${{ needs.build-and-release.outputs.timestamp }}
+          release_name: Release ${{ needs.build-and-release.outputs.timestamp }}
           files: release-assets/* # Upload all files in the release-assets directory
