@@ -15,13 +15,13 @@ var (
 		"authentication_type": "",
 		"verification_url": "https://api.example.com/example",
 		"test_secrets": {
-			"huggingface_secret": "MzA0NTIyNzk0OUJDrRZvQdOxxxxxxxxxxxxxxxxxxxxxx"
+			"huggingface_secret": "MzA0NTIyNzk0OUJDrRZvQdOxxxxxxxxxxxxxxxxxxxxxxx"
 		},
 		"expected_response": "200",
 		"method": "GET",
 		"deprecated": false
 	}]`
-	secret = "MzA0NTIyNzk0OUJDrxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	secret = "MzA0NTIyNzk0OUJDrxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 )
 
 func TestDingDoc_Pattern(t *testing.T) {
