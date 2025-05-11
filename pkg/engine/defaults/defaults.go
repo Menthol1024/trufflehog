@@ -82,6 +82,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresastoken"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresearchadminkey"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresearchquerykey"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/bailian"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/bannerbear"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/baremetrics"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/beamer"
@@ -821,6 +822,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/youneedabudget"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/yousign"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/youtubeapikey"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/yuque"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/zendeskapi"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/zenkitapi"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/zenrows"
@@ -1070,6 +1072,8 @@ func buildDetectorList() []detectors.Detector {
 		&digitaloceantoken.Scanner{},
 		&digitaloceanv2.Scanner{},
 		&dingdoc.Scanner{},
+		&yuque.Scanner{},
+		&bailian.Scanner{},
 		&discordbottoken.Scanner{},
 		&discordwebhook.Scanner{},
 		&disqus.Scanner{},

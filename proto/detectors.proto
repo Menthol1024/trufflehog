@@ -1036,6 +1036,8 @@ enum DetectorType {
   AzureDirectManagementKey = 1024;
   AzureAppConfigConnectionString = 1025;
   DingDoc = 1026;
+  YuQue = 1027;
+  BaiLian = 1028;
 }
 
 message Result {
