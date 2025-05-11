@@ -8,7 +8,7 @@ import (
 
 var (
 	validPattern = `AccessKeyId: xxxxxxxxx
-SecretAccessKey: xxxxxxx==`
+SecretAccessKey: xxxxxxx===`
 	secret = ""
 )
 
