@@ -1038,6 +1038,8 @@ enum DetectorType {
   DingDoc = 1026;
   YuQue = 1027;
   BaiLian = 1028;
+  Baidu = 1029;
+  Tencent=1030;
 }
 
 message Result {

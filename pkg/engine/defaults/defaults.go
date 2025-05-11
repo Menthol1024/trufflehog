@@ -82,6 +82,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresastoken"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresearchadminkey"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresearchquerykey"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/baidu"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/bailian"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/bannerbear"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/baremetrics"
@@ -730,6 +731,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/telegrambottoken"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/teletype"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/telnyx"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/tencent"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/terraformcloudpersonaltoken"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/testingbot"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/textmagic"
@@ -793,6 +795,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/visualcrossing"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/voiceflow"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/voicegain"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/volcengine"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/voodoosms"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/vouchery"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/vpnapi"
@@ -1074,6 +1077,9 @@ func buildDetectorList() []detectors.Detector {
 		&dingdoc.Scanner{},
 		&yuque.Scanner{},
 		&bailian.Scanner{},
+		&baidu.Scanner{},
+		&tencent.Scanner{},
+		&volcengine.Scanner{},
 		&discordbottoken.Scanner{},
 		&discordwebhook.Scanner{},
 		&disqus.Scanner{},

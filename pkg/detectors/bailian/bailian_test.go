@@ -26,7 +26,7 @@ var (
 	secret = ""
 )
 
-func TestYuQue_Pattern(t *testing.T) {
+func TestBailian_Pattern(t *testing.T) {
 	matches := SKToken.FindAllStringSubmatch(validPattern, -1)
 	for _, match := range matches {
 		tokenMatch := strings.TrimSpace(match[1])

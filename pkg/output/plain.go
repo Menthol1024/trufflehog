@@ -69,6 +69,15 @@ func (p *PlainPrinter) Print(_ context.Context, r *detectors.ResultWithMetadata)
 	if out.DetectorType == "1028" {
 		out.DetectorType = "bailian"
 	}
+	if out.DetectorType == "1029" {
+		out.DetectorType = "baidu"
+	}
+	if out.DetectorType == "1030" {
+		out.DetectorType = "Tencent"
+	}
+	if out.DetectorType == "1031" {
+		out.DetectorType = "Volcengine"
+	}
 	printer.Printf("Detector Type: %s\n", out.DetectorType)
 	printer.Printf("Decoder Type: %s\n", out.DecoderType)
 	printer.Printf("Raw result: %s\n", whitePrinter.Sprint(out.Raw))

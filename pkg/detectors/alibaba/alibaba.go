@@ -104,8 +104,8 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 
 			s1 := detectors.Result{
 				DetectorType: detectorspb.DetectorType_Alibaba,
-				Raw:          []byte(resMatch),
-				RawV2:        []byte(resMatch + resIdMatch),
+				Raw:          []byte(resIdMatch + ":" + resMatch),
+				RawV2:        []byte(resMatch),
 			}
 
 			if verify {
