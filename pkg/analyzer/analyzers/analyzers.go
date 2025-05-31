@@ -97,6 +97,11 @@ const (
 	AnalyzerTypeNetlify
 	AnalyzerTypeFastly
 	AnalyzerTypeMonday
+	AnalyzerTypeNgrok
+	AnalyzerTypeMux
+	AnalyzerTypePosthog
+	AnalyzerTypeDropbox
+	AnalyzerTypeDataBricks
 	// Add new items here with AnalyzerType prefix
 )
 
@@ -139,6 +144,11 @@ var analyzerTypeStrings = map[AnalyzerType]string{
 	AnalyzerTypeNetlify:       "Netlify",
 	AnalyzerTypeFastly:        "Fastly",
 	AnalyzerTypeMonday:        "Monday",
+	AnalyzerTypeNgrok:         "Ngrok",
+	AnalyzerTypeMux:           "Mux",
+	AnalyzerTypePosthog:       "Posthog",
+	AnalyzerTypeDropbox:       "Dropbox",
+	AnalyzerTypeDataBricks:    "DataBricks",
 	// Add new mappings here
 }
 
@@ -150,7 +160,7 @@ func (a AnalyzerType) String() string {
 	return "Unknown"
 }
 
-// GetSortedAnalyzerTypes returns a sorted slice of AnalyzerType strings, skipping "Invalid".
+// AvailableAnalyzers returns a sorted slice of AnalyzerType strings, skipping "Invalid".
 func AvailableAnalyzers() []string {
 	var analyzerStrings []string
 
