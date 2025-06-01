@@ -20,8 +20,8 @@ func TestPypi_Pattern(t *testing.T) {
 	//}{
 	//	{
 	//		name:  "typical pattern",
-	//		input: "pypi_token = 'pypi-AgEIcHlwaS5vcmcCJDQyM2M0Yjg4LWUyNDnnnnhhMy1hNigyLWI2ZWUyMTMwYzI2MgACKlszLCJhOWQwMWE0MS01Nzk4LTQyOWYtOTk4MS1lYzE5NTJhM2E3YzgiXQAABiBeGtDnnnnnV32VpiyeU-YUDKplSv0E5ngmwsnHaV2jGg'",
-	//		want:  []string{"pypi-AgEIcHlwaS5vcmcCJDQyM2M0Yjg4LWUyNDnnnnhhMy1hNigyLWI2ZWUyMTMwYzI2MgACKlszLCJhOWQwMWE0MS01Nzk4LTQyOWYtOTk4MS1lYzE5NTJhM2E3YzgiXQAABiBeGtDnnnnnV32VpiyeU-YUDKplSv0E5ngmwsnHaV2jGg"},
+	//		input: "pypi_token = 'pypi--YUDKplSv0E5ngmwsnHaV2jGg'",
+	//		want:  []string{"pypi--YUDKplSv0E5ngmwsnHaV2jGg"},
 	//	},
 	//}
 	//
