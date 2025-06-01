@@ -44,7 +44,6 @@ func fingerprintPublicKey(pubKey any) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	publicKeyFingerprint := sha1.Sum(publickeyBytes)
 	publicKeyFingerprintInHex := hex.EncodeToString(publicKeyFingerprint[:])
 	return publicKeyFingerprintInHex, nil

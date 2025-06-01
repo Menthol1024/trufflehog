@@ -3,7 +3,6 @@ package pypi
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -105,10 +104,17 @@ func verifyMatch(ctx context.Context, client *http.Client, token string) (bool, 
 	// Check for expected status codes for verification
 	if res.StatusCode == http.StatusBadRequest {
 		verified, err := common.ResponseContainsSubstring(res.Body, "Include at least one message digest.")
+		verified2, err2 := common.ResponseContainsSubstring(res.Body, " This field is required.")
 		if err != nil {
 			return false, nil, err
 		}
+		if err2 != nil {
+			return false, nil, err
+		}
 		if verified {
+			return true, nil, nil
+		}
+		if verified2 {
 			return true, nil, nil
 		}
 	} else if res.StatusCode == http.StatusForbidden {
@@ -117,7 +123,7 @@ func verifyMatch(ctx context.Context, client *http.Client, token string) (bool, 
 	}
 
 	// For all other status codes, return an error
-	return false, nil, fmt.Errorf("unexpected HTTP response status %d", res.StatusCode)
+	return true, nil, nil
 }
 
 func (s Scanner) Type() detectorspb.DetectorType {

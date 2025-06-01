@@ -360,6 +360,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/honeycomb"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/host"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/html2pdf"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/huaweicloud"
 	hubspot_apikey_v1 "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/hubspot_apikey/v1"
 	hubspot_apikey_v2 "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/hubspot_apikey/v2"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/huggingface"
@@ -1720,6 +1721,7 @@ func buildDetectorList() []detectors.Detector {
 		&zonkafeedback.Scanner{},
 		&zulipchat.Scanner{},
 		&stripepaymentintent.Scanner{},
+		&huaweicloud.Scanner{},
 	}
 }
 
