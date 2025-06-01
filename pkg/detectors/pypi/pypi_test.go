@@ -8,7 +8,7 @@ import (
 func TestPypi_Pattern(t *testing.T) {
 	d := Scanner{}
 	ctx, _ := context.WithCancelCause(context.Background())
-	isVerified, extraData, _ := verifyMatch(ctx, d.client, "pypi-")
+	isVerified, extraData, _ := verifyMatch(ctx, d.client, "")
 	println(isVerified)
 	println(extraData)
 
