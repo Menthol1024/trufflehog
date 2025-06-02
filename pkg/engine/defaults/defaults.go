@@ -84,6 +84,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresearchadminkey"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/azuresearchquerykey"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/baidu"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/baiduapikey"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/bailian"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/bannerbear"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/baremetrics"
@@ -238,6 +239,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/docusign"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/doppler"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/dotmailer"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/doubao"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/dovico"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/dronahq"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/droneci"
@@ -366,6 +368,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/huggingface"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/humanity"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/hunter"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/hunyuan"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/hybiscus"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/hypertrack"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/iconfinder"
@@ -1083,6 +1086,7 @@ func buildDetectorList() []detectors.Detector {
 		&dingdoc.Scanner{},
 		&yuque.Scanner{},
 		&bailian.Scanner{},
+		&hunyuan.Scanner{},
 		&baidu.Scanner{},
 		&tencent.Scanner{},
 		&volcengine.Scanner{},
@@ -1722,6 +1726,8 @@ func buildDetectorList() []detectors.Detector {
 		&zulipchat.Scanner{},
 		&stripepaymentintent.Scanner{},
 		&huaweicloud.Scanner{},
+		&doubao.Scanner{},
+		&baiduapikey.Scanner{},
 	}
 }
 

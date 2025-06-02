@@ -1133,13 +1133,16 @@ const (
 	DetectorType_DeepSeek                                DetectorType = 1026
 	DetectorType_StripePaymentIntent                     DetectorType = 1027
 
-	DetectorType_DingDoc    DetectorType = 2026
-	DetectorType_YuQue      DetectorType = 2027
-	DetectorType_BaiLian    DetectorType = 2028
-	DetectorType_Baidu      DetectorType = 2029
-	DetectorType_Tencent    DetectorType = 2030
-	DetectorType_Volcengine DetectorType = 2031
-	DetectorType_Huawei     DetectorType = 2032
+	DetectorType_DingDoc     DetectorType = 2026
+	DetectorType_YuQue       DetectorType = 2027
+	DetectorType_BaiLian     DetectorType = 2028
+	DetectorType_Baidu       DetectorType = 2029
+	DetectorType_Tencent     DetectorType = 2030
+	DetectorType_Volcengine  DetectorType = 2031
+	DetectorType_Huawei      DetectorType = 2032
+	DetectorType_Doubao      DetectorType = 2033
+	DetectorType_BaiduApiKey DetectorType = 2034
+	DetectorType_HunYuan     DetectorType = 2035
 )
 
 // Enum value maps for DetectorType.
@@ -2177,6 +2180,9 @@ var (
 		2030: "Tencent",
 		2031: "Volcengine",
 		2032: "Huawei",
+		2033: "Doubao",
+		2034: "BaiduApiKey",
+		2035: "HunYuan",
 	}
 	DetectorType_value = map[string]int32{
 		"Alibaba":                               0,
@@ -3204,13 +3210,16 @@ var (
 		"DeepSeek":                          1026,
 		"StripePaymentIntent":               1027,
 
-		"DingDoc":    2026,
-		"YuQue":      2027,
-		"BaiLian":    2028,
-		"Baidu":      2029,
-		"Tencent":    2030,
-		"Volcengine": 2031,
-		"Huawei":     2032,
+		"DingDoc":     2026,
+		"YuQue":       2027,
+		"BaiLian":     2028,
+		"Baidu":       2029,
+		"Tencent":     2030,
+		"Volcengine":  2031,
+		"Huawei":      2032,
+		"Doubao":      2033,
+		"BaiduApiKey": 2034,
+		"HunYuan":     2035,
 	}
 )
 

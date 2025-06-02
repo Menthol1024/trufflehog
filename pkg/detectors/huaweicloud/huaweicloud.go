@@ -99,7 +99,6 @@ func verifyHuawei(ctx context.Context, client *http.Client, resIdMatch, resMatch
 		return true, nil
 	}
 	if obsError, ok := err.(obs.ObsError); ok {
-		println(obsError.Error())
 		if strings.Contains(obsError.Error(), "InvalidAccessKeyId") {
 			return false, nil
 		}

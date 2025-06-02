@@ -60,23 +60,35 @@ func (p *PlainPrinter) Print(_ context.Context, r *detectors.ResultWithMetadata)
 	if r.VerificationFromCache {
 		cyanPrinter.Print("(Verification info cached)\n")
 	}
-	if out.DetectorType == "1026" {
+	if out.DetectorType == "2026" {
 		out.DetectorType = "dingdoc"
 	}
-	if out.DetectorType == "1027" {
+	if out.DetectorType == "2027" {
 		out.DetectorType = "yuque"
 	}
-	if out.DetectorType == "1028" {
+	if out.DetectorType == "2028" {
 		out.DetectorType = "bailian"
 	}
-	if out.DetectorType == "1029" {
+	if out.DetectorType == "2029" {
 		out.DetectorType = "baidu"
 	}
-	if out.DetectorType == "1030" {
+	if out.DetectorType == "2030" {
 		out.DetectorType = "Tencent"
 	}
-	if out.DetectorType == "1031" {
+	if out.DetectorType == "2031" {
 		out.DetectorType = "Volcengine"
+	}
+	if out.DetectorType == "2032" {
+		out.DetectorType = "Huawei"
+	}
+	if out.DetectorType == "2033" {
+		out.DetectorType = "doubao"
+	}
+	if out.DetectorType == "2034" {
+		out.DetectorType = "baiduapikey"
+	}
+	if out.DetectorType == "2035" {
+		out.DetectorType = "HunYuan"
 	}
 	printer.Printf("Detector Type: %s\n", out.DetectorType)
 	printer.Printf("Decoder Type: %s\n", out.DecoderType)
