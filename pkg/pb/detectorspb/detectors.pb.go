@@ -1143,6 +1143,7 @@ const (
 	DetectorType_Doubao      DetectorType = 2033
 	DetectorType_BaiduApiKey DetectorType = 2034
 	DetectorType_HunYuan     DetectorType = 2035
+	DetectorType_Alibabadm   DetectorType = 2036
 )
 
 // Enum value maps for DetectorType.
@@ -2183,6 +2184,7 @@ var (
 		2033: "Doubao",
 		2034: "BaiduApiKey",
 		2035: "HunYuan",
+		2036: "Alibabadm",
 	}
 	DetectorType_value = map[string]int32{
 		"Alibaba":                               0,
@@ -3220,6 +3222,7 @@ var (
 		"Doubao":      2033,
 		"BaiduApiKey": 2034,
 		"HunYuan":     2035,
+		"Alibabadm":   2036,
 	}
 )
 

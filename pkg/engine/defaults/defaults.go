@@ -24,6 +24,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/aletheiaapi"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/algoliaadminkey"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/alibaba"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/alibabadm"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/alienvault"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/allsports"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/amadeus"
@@ -1728,6 +1729,7 @@ func buildDetectorList() []detectors.Detector {
 		&huaweicloud.Scanner{},
 		&doubao.Scanner{},
 		&baiduapikey.Scanner{},
+		&alibabadm.Scanner{},
 	}
 }
 
