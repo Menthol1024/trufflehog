@@ -116,7 +116,7 @@ func verifyTencent(ctx context.Context, client *http.Client, resIdMatch, resMatc
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		//AuthFailure.SecretIdNotFound
 		//AuthFailure.SignatureFailure TencentCloudSDKError
-		if strings.Contains(err.Error(), "AuthFailure.SignatureFailure") {
+		if strings.Contains(err.Error(), "AuthFailure.SecretIdNotFound") {
 			return false, nil
 		}
 		return true, nil
