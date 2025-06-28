@@ -36,6 +36,7 @@ var _ detectors.Detector = (*Scanner)(nil)
 var _ detectors.CustomFalsePositiveChecker = (*Scanner)(nil)
 var _ detectors.MaxSecretSizeProvider = (*Scanner)(nil)
 
+// todo 解析 ENCRYPTED PRIVATE KEY
 var (
 	// TODO: add base64 encoded key support
 	client = common.RetryableHTTPClient()
@@ -76,6 +77,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 		if err != nil && strings.Contains(err.Error(), "private key is passphrase protected") {
 			s1.ExtraData["encrypted"] = "true"
 			parsedKey, passphrase, err = Crack([]byte(token))
+			println(parsedKey)
 			if err != nil {
 				s1.SetVerificationError(err, token)
 				continue
@@ -84,6 +86,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 				s1.ExtraData["cracked_encryption_passphrase"] = "true"
 			}
 		} else if err != nil {
+			// unsupported key type "ENCRYPTED PRIVATE KEY"
 			// couldn't parse key, probably invalid
 			continue
 		}

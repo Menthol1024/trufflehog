@@ -48,7 +48,35 @@ var (
 // Keywords are used for efficiently pre-filtering chunks.
 // Use identifiers in the secret preferably, or the provider name.
 func (s Scanner) Keywords() []string {
-	return []string{"ALTAK"}
+	return []string{"ALTAK", "AccessKey",
+		// AK（Access Key ID）
+		"AccessKeyId",
+		"access_key_id",
+		"AccessKeyID",
+		"ACCESS_KEY_ID",
+		"Access_Key_Id",
+		"access-key-id",
+		"secret_id", // 腾讯云使用 SecretId 作为 AK
+		"SecretId",
+		"AWS_ACCESS_KEY_ID",
+		"AWS_ACCESS_KEY",
+		"ACCESS_KEY",
+
+		// SK（Secret Access Key）
+		"AccessKeySecret",
+		"access_key_secret",
+		"AccessKeySECRET",
+		"ACCESS_KEY_SECRET",
+		"Access_Key_Secret",
+		"access-key-secret",
+		"secret_key", // 华为云、MinIO 等通用
+		"SecretKey",
+		"secretkey",
+		"SECRET_KEY",
+		"AWS_SECRET_ACCESS_KEY",
+		"AWS_SECRET_KEY",
+		"AWS_SESSION_TOKEN", // 如果包含临时凭证的话
+	}
 }
 
 func (s Scanner) Description() string {

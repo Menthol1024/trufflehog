@@ -24,6 +24,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/aletheiaapi"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/algoliaadminkey"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/alibaba"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/alibabaak"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/alibabadm"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/alienvault"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/allsports"
@@ -740,6 +741,7 @@ import (
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/teletype"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/telnyx"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/tencent"
+	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/tencentak"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/terraformcloudpersonaltoken"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/testingbot"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/textmagic"
@@ -1730,6 +1732,8 @@ func buildDetectorList() []detectors.Detector {
 		&doubao.Scanner{},
 		&baiduapikey.Scanner{},
 		&alibabadm.Scanner{},
+		&tencentak.Scanner{},
+		&alibabaak.Scanner{},
 	}
 }
 

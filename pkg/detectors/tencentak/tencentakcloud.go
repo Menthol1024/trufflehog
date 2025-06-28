@@ -1,13 +1,18 @@
-package huaweicloud
+package tencentak
 
 import (
-	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
+	tencentcommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
+	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
 	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
 	"net/http"
 	"strings"
 )
+
 import (
 	"context"
 	regexp "github.com/wasilibs/go-re2"
@@ -18,13 +23,6 @@ type Scanner struct {
 	client *http.Client
 }
 
-type Credentials struct {
-	AccessKeyID     string
-	SecretAccessKey []byte
-}
-
-const HuaweicloudURL = "https://obs.cn-north-4.myhuaweicloud.com"
-
 var (
 	// Ensure the Scanner satisfies the interface at compile time.
 	_ detectors.Detector = (*Scanner)(nil)
@@ -32,14 +30,15 @@ var (
 	defaultClient = common.SaneHttpClient()
 
 	// Make sure that your group is surrounded in boundary characters such as below to reduce false positives.
-	idPat  = regexp.MustCompile(`\b([a-zA-Z0-9]{20})\b`)
-	keyPat = regexp.MustCompile(`\b([a-zA-Z0-9]{40})[\"';\s]*`)
+	//keyPat = regexp.MustCompile(`\b([a-zA-Z0-9]{32})\b`)
+	idPat = regexp.MustCompile(`\b(AKID[a-zA-Z0-9]{32})[\"';\s]*`)
 )
 
 // Keywords are used for efficiently pre-filtering chunks.
 // Use identifiers in the secret preferably, or the provider name.
 func (s Scanner) Keywords() []string {
-	return []string{"HPUA",
+	return []string{
+		"AKID",
 		"AccessKey",
 		// AK（Access Key ID）
 		"AccessKeyId",
@@ -72,7 +71,7 @@ func (s Scanner) Keywords() []string {
 }
 
 func (s Scanner) Description() string {
-	return "Huawei cloud ak/sk"
+	return "tencent cloud only ak"
 }
 
 func (s Scanner) getClient() *http.Client {
@@ -82,63 +81,52 @@ func (s Scanner) getClient() *http.Client {
 	return defaultClient
 }
 
+// FromData will find and optionally verify Tencent secrets in a given set of bytes.
 func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (results []detectors.Result, err error) {
 	dataStr := string(data)
-	matches := keyPat.FindAllStringSubmatch(dataStr, -1)
 	idMatches := idPat.FindAllStringSubmatch(dataStr, -1)
+	for _, idMatch := range idMatches {
 
-	for _, match := range matches {
-		resMatch := strings.TrimSpace(match[1])
+		resIdMatch := strings.TrimSpace(idMatch[1])
 
-		for _, idMatch := range idMatches {
-
-			resIdMatch := strings.TrimSpace(idMatch[1])
-
-			s1 := detectors.Result{
-				DetectorType: detectorspb.DetectorType_Huawei,
-				Raw:          []byte(resIdMatch + ":" + resMatch),
-				RawV2:        []byte(resMatch),
-			}
-
-			if verify {
-				client := s.getClient()
-				isVerified, verificationErr := verifyHuawei(ctx, client, resIdMatch, resMatch)
-				s1.Verified = isVerified
-				s1.SetVerificationError(verificationErr, resMatch)
-			}
-
-			results = append(results, s1)
+		s1 := detectors.Result{
+			DetectorType: detectorspb.DetectorType_TencentAK,
+			Raw:          []byte(resIdMatch),
+			RawV2:        []byte(resIdMatch),
 		}
+		resMatch := strings.TrimSpace("test")
+		if verify {
+			client := s.getClient()
+			isVerified, verificationErr := verifyTencent(ctx, client, resIdMatch, resMatch)
+			s1.Verified = isVerified
+			s1.SetVerificationError(verificationErr, resMatch)
+		}
+		results = append(results, s1)
 	}
 
 	return results, nil
 }
 
-func verifyHuawei(ctx context.Context, client *http.Client, resIdMatch, resMatch string) (bool, error) {
+func verifyTencent(ctx context.Context, client *http.Client, resIdMatch, resMatch string) (bool, error) {
 	AK, SK := resIdMatch, resMatch
-	obsClient, err := obs.New(AK, SK, HuaweicloudURL /*, obs.WithSecurityToken(securityToken)*/)
+	credential := tencentcommon.NewCredential(AK, SK)
+	TencentClient, _ := cvm.NewClient(credential, regions.Guangzhou, profile.NewClientProfile())
+	request := cvm.NewDescribeInstancesRequest()
+	_, err := TencentClient.DescribeInstances(request)
+	if _, ok := err.(*errors.TencentCloudSDKError); ok {
+		//AuthFailure.SecretIdNotFound
+		//AuthFailure.SignatureFailure TencentCloudSDKError
+		if strings.Contains(err.Error(), "AuthFailure.SignatureFailure") {
+			return false, nil
+		}
+		return true, nil
+	}
 	if err != nil {
-		return false, nil
+		panic(err)
 	}
-	input := &obs.ListBucketsInput{}
-	input.QueryLocation = true
-	input.BucketType = obs.OBJECT
-	_, err = obsClient.ListBuckets(input)
-	if err == nil {
-		return true, nil
-	}
-	if obsError, ok := err.(obs.ObsError); ok {
-		if strings.Contains(obsError.Error(), "InvalidAccessKeyId") {
-			return false, nil
-		}
-		if strings.Contains(obsError.Error(), "SignatureDoesNotMatch") {
-			return false, nil
-		}
-		return true, nil
-	}
-	return false, nil
+	return true, nil
 }
 
 func (s Scanner) Type() detectorspb.DetectorType {
-	return detectorspb.DetectorType_Huawei
+	return detectorspb.DetectorType_TencentAK
 }
