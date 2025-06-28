@@ -48,6 +48,7 @@ var (
 	idPat = regexp.MustCompile(`\b(LTAI[a-zA-Z0-9]{12,22})[\"';\s]*`)
 )
 
+// todo 还没有完成
 // Keywords are used for efficiently pre-filtering chunks.
 // Use identifiers in the secret preferably, or the provider name.
 func (s Scanner) Keywords() []string {
