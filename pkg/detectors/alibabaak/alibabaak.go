@@ -6,8 +6,7 @@ import (
 	"crypto/rand"
 	"crypto/sha1"
 	"encoding/base64"
-	"encoding/json"
-	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -182,26 +181,16 @@ func verifyAlibaba(ctx context.Context, client *http.Client, resIdMatch, resMatc
 		return false, err
 	}
 	defer res.Body.Close()
-
-	var alibabaResp alibabaResp
-	if err = json.NewDecoder(res.Body).Decode(&alibabaResp); err != nil {
-		return false, err
+	bodyBytes, err := io.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
 	}
-
-	switch res.StatusCode {
-	case http.StatusOK:
-		return true, nil
-	case http.StatusNotFound, http.StatusBadRequest:
-		// 400 used for most of error cases
-		// 404 used if the AccessKeyId is not valid
-		return false, nil
-	default:
-		err := fmt.Errorf("unexpected HTTP response status %d", res.StatusCode)
-		if alibabaResp.Message != "" {
-			err = fmt.Errorf("%s: %s, %s", err, alibabaResp.Message, alibabaResp.Code)
-		}
-		return false, err
+	bodyString := string(bodyBytes)
+	//SK 错误
+	if strings.Contains(bodyString, "request signature does not") {
+		return true, err
 	}
+	return false, err
 }
 
 func (s Scanner) Type() detectorspb.DetectorType {
