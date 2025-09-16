@@ -26,6 +26,13 @@ var (
 		"deprecated": false
 	}]`
 	secret = "abc123def4567890abcdef1234567890abcdef12"
+	
+	// Test case for git commit hash false positive
+	gitCommitPattern = `{
+		"commit": "5febea22354eb8b6b56e22096a3cddefcded34ad",
+		"message": "Fix bug in authentication"
+	}`
+	gitCommitHash = "5febea22354eb8b6b56e22096a3cddefcded34ad"
 )
 
 func TestGithub_Pattern(t *testing.T) {
@@ -41,6 +48,11 @@ func TestGithub_Pattern(t *testing.T) {
 			name:  "valid pattern",
 			input: validPattern,
 			want:  []string{secret},
+		},
+		{
+			name:  "git commit hash should not be detected",
+			input: gitCommitPattern,
+			want:  []string{}, // Should not detect git commit hash
 		},
 	}
 

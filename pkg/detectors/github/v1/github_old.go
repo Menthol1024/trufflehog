@@ -28,7 +28,8 @@ func (Scanner) CloudEndpoint() string { return "https://api.github.com" }
 var (
 	// Oauth token
 	// https://developer.github.com/v3/#oauth2-token-sent-in-a-header
-	// the middle regex `\b[a-zA-Z0-9.\/?=&]{0,40}` is to match the prefix of token match to avoid processing common known patterns
+	// Modified to be more specific and avoid false positives with git commit hashes
+	// Only match when there's a clear token context (not just any 40-char hex string)
 	keyPat = regexp.MustCompile(detectors.PrefixRegex([]string{"github", "gh", "pat", "token"}) + `\b[a-zA-Z0-9.\/?=&]{0,40}` + `\b([a-f0-9]{40})\b`)
 
 	// TODO: Oauth2 client_id and client_secret
@@ -76,6 +77,21 @@ var ghKnownNonSensitivePrefixes = []string{
 	"avatars.githubusercontent.com", // github avatar urls prefix
 }
 
+// isGitCommitHash checks if the token looks like a git commit hash
+// Git commit hashes are 40-character hexadecimal strings
+func isGitCommitHash(token string) bool {
+	if len(token) != 40 {
+		return false
+	}
+	// Check if it's all hexadecimal characters
+	for _, char := range token {
+		if !((char >= '0' && char <= '9') || (char >= 'a' && char <= 'f')) {
+			return false
+		}
+	}
+	return true
+}
+
 // FromData will find and optionally verify GitHub secrets in a given set of bytes.
 func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (results []detectors.Result, err error) {
 	dataStr := string(data)
@@ -90,6 +106,11 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 		// Note that this false positive check happens **before** verification! I don't know why it's written this way
 		// but that's why this logic wasn't moved into a CustomFalsePositiveChecker implementation.
 		if isFp, _ := detectors.IsKnownFalsePositive(token, ghFalsePositives, false); isFp {
+			continue
+		}
+
+		// Filter out git commit hashes to avoid false positives
+		if isGitCommitHash(token) {
 			continue
 		}
 
